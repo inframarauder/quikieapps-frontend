@@ -1,23 +1,40 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Alert } from "react-bootstrap";
 import { getCompanyStockPrice } from "../utils/api";
 
 const HeroCardSection = () => {
   const [stockPrices, setStockPrices] = useState({ FB: 0, GOOGL: 0, AMZN: 0 });
   const [loading, setLoading] = useState(false);
+  const [rateLimitExpired, setRateLimitExpired] = useState(false);
 
   const loadStockPrices = useCallback(
     () =>
-      (() => {
+      (async () => {
         setLoading(true);
-        Object.keys(stockPrices).forEach(async (key) => {
-          try {
-            const price = await getCompanyStockPrice(key);
-            setStockPrices((state) => ({ ...state, [key]: price }));
-          } catch (error) {
-            console.error(error);
+
+        try {
+          const fbResp = getCompanyStockPrice("FB");
+          const googlResp = getCompanyStockPrice("GOOGL");
+          const amznResp = getCompanyStockPrice("AMZN");
+
+          const [fb, googl, amzn] = await Promise.all([
+            fbResp,
+            googlResp,
+            amznResp,
+          ]);
+
+          setStockPrices((state) => ({
+            ...state,
+            FB: fb,
+            GOOGL: googl,
+            AMZN: amzn,
+          }));
+        } catch (error) {
+          console.error(error);
+          if (error === "limit reached") {
+            setRateLimitExpired(true);
           }
-        });
+        }
 
         setLoading(false);
       })(),
@@ -30,6 +47,7 @@ const HeroCardSection = () => {
     <></>
   ) : (
     <div className="my-4 center-content">
+      {rateLimitExpired && <Alert variant="danger">Rate limit reached!</Alert>}
       <Row>
         {Object.keys(stockPrices).map((key, i) => (
           <Col sm="4" className="center-content" key={i}>
