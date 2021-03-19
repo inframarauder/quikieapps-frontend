@@ -1,13 +1,23 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.hero-card {
+  width: 20rem;
+  height: 12rem;
+  border: 2px dotted #bebebe;
+  background-color: #dcdcdc;
+}
+
+.card-img {
+  width: 50px;
+  float: right;
+}
+
+.card-text {
+  font-size: 1.8rem;
+  text-align: center;
 }
