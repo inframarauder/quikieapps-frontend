@@ -17,7 +17,9 @@ export const listStocks = () => {
   return new Promise(async (resolve, reject) => {
     try {
       const allStocksRes = await axios.get(`https://stockapi.glitch.me/all`);
-      const savedStocksRes = await axios.get("http://localhost:5000/api");
+      const savedStocksRes = await axios.get(
+        "https://quickieapps.herokuapp.com/api"
+      );
       let savedSymbols = savedStocksRes.data.map((stock) => stock.symbol);
       let unsavedStocks = allStocksRes.data.filter(
         (stock) => savedSymbols.indexOf(stock.symbol) === -1
@@ -33,7 +35,7 @@ export const listStocks = () => {
 export const saveStock = (stock) => {
   return new Promise((resolve, reject) => {
     axios
-      .post("http://localhost:5000/api", stock)
+      .post("https://quickieapps.herokuapp.com/api", stock)
       .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
@@ -42,7 +44,7 @@ export const saveStock = (stock) => {
 export const getSavedStocks = () => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`http://localhost:5000/api`)
+      .get(`https://quickieapps.herokuapp.com/api`)
       .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
@@ -51,7 +53,7 @@ export const getSavedStocks = () => {
 export const deleteStockRecord = (id) => {
   return new Promise((resolve, reject) => {
     axios
-      .delete(`http://localhost:5000/api/${id}`)
+      .delete(`https://quickieapps.herokuapp.com/api/${id}`)
       .then(() => resolve())
       .catch((err) => reject(err));
   });

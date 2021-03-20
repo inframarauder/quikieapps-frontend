@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Container, Navbar } from "react-bootstrap";
 import { getSavedStocks, deleteStockRecord } from "../utils/api";
 import { Loader, PaginatedTable } from "../components";
+import { Button } from "react-bootstrap";
 
 const SavedData = () => {
   const [stockData, setStockData] = useState([]);
@@ -40,7 +41,7 @@ const SavedData = () => {
 
   return (
     <Container className="my-4">
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar bg="light" variant="light">
         <Navbar.Brand>Saved Data Table </Navbar.Brand>
       </Navbar>
       {loading ? (
@@ -52,6 +53,15 @@ const SavedData = () => {
           deleteStockRecord={handleDelete}
         />
       )}
+      <div className="center-content my-4">
+        <Button
+          variant="secondary"
+          className="table-btn"
+          onClick={() => (window.location.href = "/")}
+        >
+          Back
+        </Button>
+      </div>
     </Container>
   );
 };
