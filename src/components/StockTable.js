@@ -1,11 +1,19 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Container, Table, Navbar, Form } from "react-bootstrap";
+import ReactPaginate from "react-paginate";
 import { listStocks } from "../utils/api";
 import Loader from "./Loader";
 import StockData from "./StockData";
 
 const StockTable = () => {
-  const [stockData, setStockData] = useState([]);
+  const [tableState, setTableState] = useState({
+    offset: 0,
+    tableData: [],
+    completeData: [],
+    perPage: 5,
+    currentPage: 0,
+    pageCount: 0,
+  });
   const [loading, setLoading] = useState(false);
 
   const loadStockData = useCallback(
@@ -14,7 +22,14 @@ const StockTable = () => {
         setLoading(true);
         try {
           const data = await listStocks();
-          setStockData(data);
+          const { offset, perPage } = tableState;
+          const slice = data.slice(offset, offset + perPage);
+          setTableState((state) => ({
+            ...state,
+            pageCount: Math.ceil(data.length / perPage),
+            tableData: slice,
+            completeData: data,
+          }));
         } catch (error) {
           console.error(error);
         }
@@ -33,8 +48,27 @@ const StockTable = () => {
       loadStockData();
     } else {
       const re = new RegExp(value, "gi");
-      setStockData(stockData.filter((stock) => stock.company_name.match(re)));
+      setTableState((state) => ({
+        ...state,
+        tableData: state.tableData.filter((stock) =>
+          stock.company_name.match(re)
+        ),
+      }));
     }
+  };
+
+  const handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    const newOffset = selectedPage * tableState.perPage;
+    const { completeData, perPage } = tableState;
+    const slice = completeData.slice(newOffset, newOffset + perPage);
+    setTableState({
+      ...tableState,
+      currentPage: selectedPage,
+      offset: newOffset,
+      pageCount: Math.ceil(completeData.length / perPage),
+      tableData: slice,
+    });
   };
 
   return (
@@ -55,25 +89,40 @@ const StockTable = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Table>
-          <thead>
-            <tr>
-              <th>COMPANY NAME</th>
-              <th>SYMBOL</th>
-              <th>MARKET CAP.</th>
-              <th>CURRENT PRICE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stockData.map((stock) => {
-              return (
-                <tr key={stock._id}>
-                  <StockData stock={stock} />
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+        <>
+          <Table>
+            <thead>
+              <tr>
+                <th>COMPANY NAME</th>
+                <th>SYMBOL</th>
+                <th>MARKET CAP.</th>
+                <th>CURRENT PRICE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableState.tableData.map((stock) => {
+                return (
+                  <tr key={stock._id}>
+                    <StockData stock={stock} />
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+          <ReactPaginate
+            previousLabel={"<"}
+            nextLabel={">"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={tableState.pageCount}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={1}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+          />
+        </>
       )}
     </Container>
   );
