@@ -21,15 +21,27 @@ const StockData = ({ stock, savedDataTable, deleteStockRecord }) => {
 
   const getButton = (stock) => {
     return savedDataTable ? (
-      <Button variant="danger" onClick={() => deleteStockRecord(stock._id)}>
+      <Button
+        variant="danger"
+        className="table-btn"
+        onClick={() => deleteStockRecord(stock._id)}
+      >
         Delete
       </Button>
     ) : stock.saved ? (
-      <Button variant="info" onClick={() => (window.location.href = "/view")}>
-        View
+      <Button
+        style={{ backgroundColor: "#663399" }}
+        className="table-btn"
+        onClick={() => (window.location.href = "/view")}
+      >
+        <strong>View</strong>
       </Button>
     ) : (
-      <Button variant="primary" onClick={() => handleSave(stock)}>
+      <Button
+        variant="primary"
+        className="table-btn"
+        onClick={() => handleSave(stock)}
+      >
         Save
       </Button>
     );
@@ -40,8 +52,8 @@ const StockData = ({ stock, savedDataTable, deleteStockRecord }) => {
       <td>{stockData.company_name}</td>
       <td>{stockData.symbol}</td>
       <td>{stockData.market_cap}</td>
-      <td>{stockData.price}</td>
       <td>{loading ? <Loader /> : getButton(stockData)}</td>
+      <td>{stockData.price}</td>
     </>
   );
 };

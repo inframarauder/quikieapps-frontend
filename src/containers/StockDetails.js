@@ -37,21 +37,24 @@ const StockDetails = () => {
   };
 
   return (
-    <Container className="my-4">
-      <Navbar bg="dark" variant="dark" expand="lg">
+    <Container className="my-4 table-container">
+      <Navbar bg="light" variant="light">
         <Navbar.Brand href="#home">Stock Details Table </Navbar.Brand>
 
-        <Form inline>
+        <Form inline className="ml-4">
           <Form.Control
             type="text"
-            placeholder="Search by company name.."
-            className="ml-4"
+            placeholder=" &#x1F50D; Search by company name.."
             htmlSize={50}
             onChange={handleSearch}
           />
         </Form>
       </Navbar>
-      {loading ? <Loader /> : <PaginatedTable data={stockData} />}
+      {loading ? (
+        <Loader />
+      ) : (
+        <PaginatedTable data={stockData} className="w-100" />
+      )}
     </Container>
   );
 };
