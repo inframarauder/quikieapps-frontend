@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Container, Table, Navbar, Form } from "react-bootstrap";
 import { listStocks } from "../utils/api";
+import Loader from "./Loader";
 
 const StockTable = () => {
   const [stockData, setStockData] = useState([]);
@@ -34,9 +35,7 @@ const StockTable = () => {
       setStockData(stockData.filter((stock) => stock.company_name.match(re)));
     }
   };
-  return loading ? (
-    <></>
-  ) : (
+  return (
     <Container className="my-4">
       <Navbar bg="dark" variant="dark" expand="lg">
         <Navbar.Brand href="#home">Stock Details Table </Navbar.Brand>
@@ -51,28 +50,32 @@ const StockTable = () => {
           />
         </Form>
       </Navbar>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>COMPANY NAME</th>
-            <th>SYMBOL</th>
-            <th>MARKET CAP.</th>
-            <th>CURRENT PRICE</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stockData.map((stock) => {
-            return (
-              <tr key={stock._id}>
-                <td>{stock.company_name}</td>
-                <td>{stock.symbol}</td>
-                <td>{stock.market_cap}</td>
-                <td>{stock.price}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>COMPANY NAME</th>
+              <th>SYMBOL</th>
+              <th>MARKET CAP.</th>
+              <th>CURRENT PRICE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockData.map((stock) => {
+              return (
+                <tr key={stock._id}>
+                  <td>{stock.company_name}</td>
+                  <td>{stock.symbol}</td>
+                  <td>{stock.market_cap}</td>
+                  <td>{stock.price}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      )}
     </Container>
   );
 };
