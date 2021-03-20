@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Card, Row, Col, Alert } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import { getCompanyStockPrice } from "../utils/api";
 
 const HeroCardSection = () => {
   const [stockPrices, setStockPrices] = useState({ FB: 0, GOOGL: 0, AMZN: 0 });
   const [loading, setLoading] = useState(false);
-  const [rateLimitExpired, setRateLimitExpired] = useState(false);
 
   const loadStockPrices = useCallback(
     () =>
@@ -31,15 +30,13 @@ const HeroCardSection = () => {
           }));
         } catch (error) {
           console.error(error);
-          if (error === "limit reached") {
-            setRateLimitExpired(true);
-          }
         }
 
         setLoading(false);
       })(),
     []
   );
+
   useEffect(() => {
     loadStockPrices();
   }, [loadStockPrices]);
@@ -47,7 +44,6 @@ const HeroCardSection = () => {
     <></>
   ) : (
     <div className="my-4 center-content">
-      {rateLimitExpired && <Alert variant="danger">Rate limit reached!</Alert>}
       <Row>
         {Object.keys(stockPrices).map((key, i) => (
           <Col sm="4" className="center-content" key={i}>
@@ -65,9 +61,7 @@ const HeroCardSection = () => {
                     className="card-img"
                   />
                 </Card.Title>
-                <Card.Text className="card-text">
-                  {Math.round(stockPrices[key])} USD
-                </Card.Text>
+                <Card.Text className="card-text">{stockPrices[key]}</Card.Text>
               </Card.Body>
             </Card>
           </Col>

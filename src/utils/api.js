@@ -3,20 +3,23 @@ import axios from "axios";
 export const getCompanyStockPrice = (symbol) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`https://www.alphavantage.co/query`, {
-        params: {
-          function: "GLOBAL_QUOTE",
-          apikey: "RORJ6U4XWQWPZSDZ",
-          symbol,
-        },
-      })
+      .get(`https://stockapi.glitch.me/${symbol}`)
       .then((res) => {
         const { data } = res;
-        if (data["Note"]) {
-          reject("limit reached");
-        } else {
-          resolve(data["Global Quote"]["05. price"]);
-        }
+
+        resolve(data[0].price);
+      })
+      .catch((err) => reject(err));
+  });
+};
+
+export const listStocks = () => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`https://stockapi.glitch.me/all`)
+      .then((res) => {
+        const { data } = res;
+        resolve(data);
       })
       .catch((err) => reject(err));
   });
