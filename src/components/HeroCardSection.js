@@ -60,9 +60,9 @@ const HeroCardSection = () => {
                     className="card-img"
                   />
                 </Card.Title>
-                <Card.Text className="card-text">
+                <div className="card-text">
                   {loading ? <Loader /> : stockPrices[key]}
-                </Card.Text>
+                </div>
               </Card.Body>
             </Card>
           </Col>

@@ -34,7 +34,7 @@ export const saveStock = (stock) => {
   return new Promise((resolve, reject) => {
     axios
       .post("http://localhost:5000/api", stock)
-      .then((res) => resolve.apply(res.data.message))
+      .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
 };
