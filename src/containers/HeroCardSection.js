@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { getCompanyStockPrice } from "../utils/api";
-import Loader from "./Loader";
+import { Loader } from "../components";
 
 const HeroCardSection = () => {
   const [stockPrices, setStockPrices] = useState({ FB: 0, GOOGL: 0, AMZN: 0 });

@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Container, Navbar, Form } from "react-bootstrap";
 import { listStocks } from "../utils/api";
-import Loader from "./Loader";
-import PaginatedTable from "./PaginatedTable";
+import { Loader, PaginatedTable } from "../components";
 
-const StockTable = () => {
+const StockDetails = () => {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -57,4 +56,4 @@ const StockTable = () => {
   );
 };
 
-export default StockTable;
+export default StockDetails;
