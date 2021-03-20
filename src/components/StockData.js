@@ -3,7 +3,7 @@ import { saveStock } from "../utils/api";
 import Loader from "./Loader";
 import { Button } from "react-bootstrap";
 
-const StockData = ({ stock }) => {
+const StockData = ({ stock, savedDataTable, deleteStockRecord }) => {
   const [loading, setLoading] = useState(false);
   const [stockData, setStockData] = useState(stock);
 
@@ -20,8 +20,14 @@ const StockData = ({ stock }) => {
   };
 
   const getButton = (stock) => {
-    return stock.saved ? (
-      <Button variant="info">View</Button>
+    return savedDataTable ? (
+      <Button variant="danger" onClick={() => deleteStockRecord(stock._id)}>
+        Delete
+      </Button>
+    ) : stock.saved ? (
+      <Button variant="info" onClick={() => (window.location.href = "/view")}>
+        View
+      </Button>
     ) : (
       <Button variant="primary" onClick={() => handleSave(stock)}>
         Save

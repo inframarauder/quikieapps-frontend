@@ -38,3 +38,21 @@ export const saveStock = (stock) => {
       .catch((err) => reject(err));
   });
 };
+
+export const getSavedStocks = () => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`http://localhost:5000/api`)
+      .then((res) => resolve(res.data))
+      .catch((err) => reject(err));
+  });
+};
+
+export const deleteStockRecord = (id) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`http://localhost:5000/api/${id}`)
+      .then(() => resolve())
+      .catch((err) => reject(err));
+  });
+};
