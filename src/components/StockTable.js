@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Container, Table, Navbar, Form } from "react-bootstrap";
-import { listStocks } from "../utils/api";
+import { Container, Table, Navbar, Form, Button } from "react-bootstrap";
+import { listStocks, saveStock } from "../utils/api";
 import Loader from "./Loader";
 
 const StockTable = () => {
@@ -35,6 +35,18 @@ const StockTable = () => {
       setStockData(stockData.filter((stock) => stock.company_name.match(re)));
     }
   };
+
+  const handleSave = async (stock) => {
+    try {
+      const message = await saveStock(stock);
+      alert(message);
+      loadStockData();
+    } catch (error) {
+      console.error(error);
+      alert("Error in saving data!");
+    }
+  };
+
   return (
     <Container className="my-4">
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -53,7 +65,7 @@ const StockTable = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Table striped bordered hover>
+        <Table>
           <thead>
             <tr>
               <th>COMPANY NAME</th>
@@ -70,6 +82,18 @@ const StockTable = () => {
                   <td>{stock.symbol}</td>
                   <td>{stock.market_cap}</td>
                   <td>{stock.price}</td>
+                  <td>
+                    {stock.saved ? (
+                      <Button variant="info">View</Button>
+                    ) : (
+                      <Button
+                        variant="primary"
+                        onClick={() => handleSave(stock)}
+                      >
+                        Save
+                      </Button>
+                    )}
+                  </td>
                 </tr>
               );
             })}
